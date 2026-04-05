@@ -20,6 +20,8 @@ neurorouter activate <your-license-key>
 
 This repo contains only release binaries and checksums. Source code is private. The free community edition is at [obstalabs/neurorouter](https://github.com/obstalabs/neurorouter).
 
+GitHub automatically shows `Source code (zip)` and `Source code (tar.gz)` assets on release pages. Those archives are snapshots of this public dist repo only; they do not contain the private Pro source repository.
+
 ## License
 
 Proprietary. See [neurorouter.dev](https://neurorouter.dev) for licensing details.
