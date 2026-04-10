@@ -23,12 +23,16 @@ Get a key at [neurorouter.dev](https://neurorouter.dev/#pricing) or try free for
 ## Quick Start
 
 ```bash
-# Start the proxy
-neurorouter proxy --target https://api.anthropic.com --protocol anthropic
+# Claude mode
+neurorouter proxy --protocol anthropic --target https://api.anthropic.com --api-key env:ANTHROPIC_API_KEY
+ANTHROPIC_BASE_URL=http://localhost:4000 claude
 
-# Point your tool at the proxy
-export ANTHROPIC_BASE_URL=http://127.0.0.1:4000
-claude
+# Codex / OpenAI mode
+neurorouter proxy --target https://api.openai.com --api-key env:OPENAI_API_KEY
+codex -c 'openai_base_url="http://127.0.0.1:4000"'
+
+# See what would be filtered without sending
+neurorouter proxy --dry-run
 ```
 
 ## What Pro Does
