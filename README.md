@@ -31,6 +31,9 @@ ANTHROPIC_BASE_URL=http://localhost:4000 claude
 neurorouter proxy --target https://api.openai.com --api-key env:OPENAI_API_KEY
 codex -c 'openai_base_url="http://127.0.0.1:4000"'
 
+# Codex no longer recommends OPENAI_BASE_URL.
+# Use openai_base_url in a Codex profile or a -c override like the example above.
+
 # See what would be filtered without sending
 neurorouter proxy --dry-run
 ```
