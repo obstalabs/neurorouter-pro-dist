@@ -75,6 +75,12 @@ neurorouter proxy --dry-run
 | Protocol detection | `neurorouter proxy --protocol anthropic` |
 | Session issues | `neurorouter doctor` then `neurorouter stats` |
 
+## Security
+
+Your API keys never leave your machine. NeuroRouter runs locally, uses environment variables or client passthrough auth, and never stores, transmits, or logs credentials. Keys exist only in process memory for the duration of the upstream request. Nothing is written to disk, state.db, or audit logs. [Verify it yourself](https://github.com/obstalabs/neurorouter-pro-dist/blob/main/docs/trust-architecture.md) — or run `lsof -i -P | grep neurorouter` and confirm the only connections are to your configured upstream.
+
+This is a structural difference from cloud LLM proxies. A [2026 study](https://arxiv.org/abs/2604.08407) found 26 LLM proxy services collecting user credentials. The [LiteLLM supply-chain breach](https://gambit.security/blog-post/a-single-operator-two-ai-platforms-nine-government-agencies-the-full-technical-report) (March 2026) compromised thousands of organizations including a $10B startup. NeuroRouter eliminates this class of risk entirely — there is no server to breach and no database to leak.
+
 ## Works with ContextSpectre
 
 NeuroRouter Pro and [ContextSpectre](https://github.com/ppiankov/contextspectre) are complementary — two stages of the same anti-waste pipeline.
