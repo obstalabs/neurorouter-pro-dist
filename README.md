@@ -75,6 +75,22 @@ neurorouter proxy --dry-run
 | Protocol detection | `neurorouter proxy --protocol anthropic` |
 | Session issues | `neurorouter doctor` then `neurorouter stats` |
 
+## Works with ContextSpectre
+
+NeuroRouter Pro and [ContextSpectre](https://github.com/ppiankov/contextspectre) are complementary — two stages of the same anti-waste pipeline.
+
+| Layer | Tool | What it does |
+|---|---|---|
+| **Real-time** | NeuroRouter Pro | Filters requests before they hit the API — strips thinking blocks, stale reads, failed retries, snapshots, progress noise. Prevents 400 errors. Redacts secrets. |
+| **Post-hoc** | ContextSpectre | Analyzes session files after requests complete — finds cross-turn tangents, measures noise ratios, repairs chain integrity, exports decisions. |
+
+In a 214-request session, NeuroRouter Pro removed 42.9% of payload in real-time. ContextSpectre found an additional 151.7K tokens of cross-turn waste that only becomes visible with full conversation history. Maximum coverage requires both.
+
+```bash
+brew install ppiankov/tap/contextspectre
+contextspectre stats
+```
+
 ## Free vs Pro
 
 The free community edition is at [obstalabs/neurorouter](https://github.com/obstalabs/neurorouter). [Full comparison](https://github.com/obstalabs/neurorouter#free-vs-pro).
