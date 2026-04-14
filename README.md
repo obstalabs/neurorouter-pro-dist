@@ -43,6 +43,7 @@ neurorouter proxy --dry-run
 **Keep your session alive:**
 - Session multiplexing — Claude, Codex, and any OpenAI-compatible tool in one daemon
 - Continuity repair — broken tool chains fixed before they become upstream 400s
+- Binary content sanitization — terminal output, SSH results, and file reads with control characters cleaned before they reach the API, preventing permanent session corruption
 - Proactive JSONL healing — orphaned entries repaired automatically
 - Context rescue — work extracted before compaction or cooldown
 
