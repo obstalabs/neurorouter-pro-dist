@@ -20,6 +20,8 @@ neurorouter activate <your-license-key>
 
 Get a key at [neurorouter.dev](https://neurorouter.dev/#pricing) or try free for 14 days.
 
+Activation validates the new key before replacing the saved key. Offline licenses work until their signed expiry; if a key expires, NeuroRouter falls back to Free and prints a clear warning.
+
 ## Quick Start
 
 ```bash
@@ -72,9 +74,37 @@ neurorouter proxy --dry-run
 | Issue | Fix |
 |-------|-----|
 | License not recognized | `neurorouter activate <key>` then `neurorouter version` |
+| License near expiry | Activate the renewed key before the date shown in the startup banner |
+| License expired | NeuroRouter falls back to Free; run `neurorouter activate <new-key>` after renewal |
+| Service deployment | Do not put `--license-key` in systemd `ExecStart`; use `EnvironmentFile=/etc/neurorouter/env` with mode `0600` and `NEUROROUTER_LICENSE=...` |
 | Port conflict | `neurorouter proxy --listen 127.0.0.1:9120` |
 | Protocol detection | `neurorouter proxy --protocol anthropic` |
 | Session issues | `neurorouter doctor` then `neurorouter stats` |
+
+### Secure service deployment
+
+For long-running services, prefer the saved activation file or a protected environment file. Command-line flags can be visible in process lists and service metadata.
+
+```ini
+# /etc/systemd/system/neurorouter.service
+[Service]
+EnvironmentFile=/etc/neurorouter/env
+ExecStart=/usr/local/bin/neurorouter proxy --listen 127.0.0.1:4000
+```
+
+```bash
+sudo install -d -m 0750 /etc/neurorouter
+sudo install -m 0600 /dev/null /etc/neurorouter/env
+sudoedit /etc/neurorouter/env
+```
+
+`/etc/neurorouter/env`:
+
+```bash
+NEUROROUTER_LICENSE=ol_...
+ANTHROPIC_API_KEY=...
+OPENAI_API_KEY=...
+```
 
 ## Security
 
