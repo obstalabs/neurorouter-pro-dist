@@ -2,7 +2,7 @@
 
 When AI fails, you keep going.
 
-NeuroRouter Pro is a local proxy that cleans, repairs, and controls AI requests before they hit the API. It sits between your tools (Claude Code, Codex, OpenClaw, Cursor, Aider) and the upstream API.
+NeuroRouter Pro is a local context-engineering proxy that preserves the semantically correct vector to the result before requests hit the API. It sits between your tools (Claude Code, Codex, OpenClaw, Cursor, Aider) and the upstream API.
 
 ## Install
 
@@ -49,9 +49,12 @@ neurorouter proxy --dry-run
 - Proactive JSONL healing — orphaned entries repaired automatically
 - Context rescue — work extracted before compaction or cooldown
 
-**Save money:**
+**Keep context sharp:**
+- Reasoning Continuity Score (RCS) — verifies decisions, constraints, and rejected approaches survive context shaping
+- Vector-state preservation — carries the objective, chosen approach, constraints, rejections, current state, and blockers across turns
+- Mutation receipts — shows what changed, which content classes were shaped, and how much signal remained
 - Auto model routing — mechanical work on Haiku or GPT-4o-mini by default
-- Token filtering — compounds via snowball to ~$60 saved per 200-turn session
+- Context shaping — removes non-cacheable repetition while preserving load-bearing constraints
 - Rate limit prediction — warns before lockout, suggests cheaper models
 - Per-project cost attribution — track spend by repo/branch
 
@@ -118,10 +121,10 @@ NeuroRouter Pro and [ContextSpectre](https://github.com/ppiankov/contextspectre)
 
 | Layer | Tool | What it does |
 |---|---|---|
-| **Real-time** | NeuroRouter Pro | Filters requests before they hit the API — strips thinking blocks, stale reads, failed retries, snapshots, progress noise. Prevents 400 errors. Redacts secrets. |
+| **Real-time** | NeuroRouter Pro | Shapes requests before they hit the API — protects vector anchors, strips stale reads, collapses failed retries, snapshots, and progress noise. Prevents 400 errors. Redacts secrets. |
 | **Post-hoc** | ContextSpectre | Analyzes session files after requests complete — finds cross-turn tangents, measures noise ratios, repairs chain integrity, exports decisions. |
 
-In a 214-request session, NeuroRouter Pro removed 42.9% of payload in real-time. ContextSpectre found an additional 151.7K tokens of cross-turn waste that only becomes visible with full conversation history. Maximum coverage requires both.
+In a 214-request session, NeuroRouter Pro shaped 42.9% of payload in real time while preserving live vector anchors. ContextSpectre found an additional 151.7K tokens of cross-turn waste that only becomes visible with full conversation history. Maximum coverage requires both.
 
 ```bash
 brew install ppiankov/tap/contextspectre
