@@ -2,7 +2,7 @@
 
 When AI fails, you keep going.
 
-NeuroRouter Pro is a local context-engineering proxy that preserves the semantically correct vector to the result before requests hit the API. It sits between your tools (Claude Code, Codex, OpenClaw, Cursor, Aider) and the upstream API.
+NeuroRouter Pro is a local context-engineering proxy that preserves the semantically correct vector to the result before requests hit the API. It is verified with Claude Code and Codex CLI, and also works with OpenAI-compatible tools that support custom base URLs.
 
 ## Install
 
@@ -51,12 +51,14 @@ neurorouter proxy --dry-run
 
 **Keep context sharp:**
 - Reasoning Continuity Score (RCS) — verifies decisions, constraints, and rejected approaches survive context shaping
-- Vector-state preservation — carries the objective, chosen approach, constraints, rejections, current state, and blockers across turns
+- Vector Lock — carries the objective, chosen approach, constraints, rejections, current state, and blockers across turns and restarts
 - Mutation receipts — shows what changed, which content classes were shaped, and how much signal remained
 - Auto model routing — mechanical work on Haiku or GPT-4o-mini by default
 - Context shaping — removes non-cacheable repetition while preserving load-bearing constraints
 - Rate limit prediction — warns before lockout, suggests cheaper models
 - Per-project cost attribution — track spend by repo/branch
+
+Vector Lock is not chat memory, RAG, or learning. It is the compact local constraint set that keeps the model on the correct path when compaction, shaping, or proxy restarts would otherwise erase load-bearing context.
 
 **Protect your data:**
 - Reversible secret redaction — credentials replaced outbound, restored inbound
