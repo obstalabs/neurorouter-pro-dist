@@ -2,7 +2,7 @@
 
 When AI fails, you keep going.
 
-NeuroRouter Pro is a local context-engineering proxy that preserves the semantically correct vector to the result before requests hit the API. It is verified with Claude Code and Codex CLI, and also works with OpenAI-compatible tools that support custom base URLs.
+NeuroRouter Pro is a local context-control proxy that keeps agent context current, preserves the active reasoning vector, and reports whether a long session is still trustworthy to continue before requests hit the API. It is verified with Claude Code and Codex CLI, and also works with OpenAI-compatible tools that support custom base URLs.
 
 ## Install
 
@@ -44,14 +44,16 @@ neurorouter proxy --dry-run
 
 **Keep your session alive:**
 - Session multiplexing — Claude, Codex, and any OpenAI-compatible tool in one daemon
-- Continuity repair — broken tool chains fixed before they become upstream 400s
-- Binary content sanitization — terminal output, SSH results, and file reads with control characters cleaned before they reach the API, preventing permanent session corruption
-- Proactive JSONL healing — orphaned entries repaired automatically
+- Continuity repair — broken tool chains repaired locally when safe, or blocked before they become upstream 400s
+- Binary content sanitization — terminal output, SSH results, and file reads with control characters cleaned before they reach the API, reducing the risk of permanent session corruption
+- Proactive JSONL healing — orphaned entries repaired when the structure is provably safe
 - Context rescue — work extracted before compaction or cooldown
 
 **Keep context sharp:**
 - Reasoning Continuity Score (RCS) — verifies decisions, constraints, and rejected approaches survive context shaping
 - Vector Lock — carries the objective, chosen approach, constraints, rejections, current state, and blockers across turns and restarts
+- Session Integrity — downgrades false-green sessions when objective freshness, workspace identity, recovery, loop, progress, or tool-chain signals fail
+- Workspace Identity Lock — keeps the active repo, path, remote, and release target explicit after compression or restart
 - Mutation receipts — shows what changed, which content classes were shaped, and how much signal remained
 - Auto model routing — mechanical work on Haiku or GPT-4o-mini by default
 - Context shaping — removes non-cacheable repetition while preserving load-bearing constraints
@@ -59,6 +61,8 @@ neurorouter proxy --dry-run
 - Per-project cost attribution — track spend by repo/branch
 
 Vector Lock is not chat memory, RAG, or learning. It is the compact local constraint set that keeps the model on the correct path when compaction, shaping, or proxy restarts would otherwise erase load-bearing context.
+
+RCS is useful, but it is not the whole health model. Session Integrity can invalidate a green RCS when the active objective is stale, the workspace lock conflicts, recovery disabled major filters, or loop/progress signals show the agent is stuck.
 
 **Protect your data:**
 - Reversible secret redaction — credentials replaced outbound, restored inbound
@@ -72,6 +76,7 @@ Vector Lock is not chat memory, RAG, or learning. It is the compact local constr
 - `neurorouter status` — live session dashboard
 - `neurorouter export` — session summary as markdown
 - `neurorouter suggest` — workflow pattern suggestions
+- `neurorouter integrity` — summarize healthy, degraded, and critical session integrity from dev captures
 - `neurorouter rescue` — extract work before session loss
 
 ## Troubleshooting
@@ -113,9 +118,9 @@ OPENAI_API_KEY=...
 
 ## Security
 
-Your API keys never leave your machine. NeuroRouter runs locally, uses environment variables or client passthrough auth, and never stores, transmits, or logs credentials. Keys exist only in process memory for the duration of the upstream request. Nothing is written to disk, state.db, or audit logs. [Verify it yourself](https://github.com/obstalabs/neurorouter-pro-dist/blob/main/docs/trust-architecture.md) — or run `lsof -i -P | grep neurorouter` and confirm the only connections are to your configured upstream.
+Your provider API keys are forwarded only to the upstream provider you configure. NeuroRouter runs locally, uses environment variables or client passthrough auth, and is designed not to store provider keys on disk, in state.db, or in audit logs. Keys exist in process memory for the duration of the upstream request. [Verify it yourself](https://github.com/obstalabs/neurorouter-pro-dist/blob/main/docs/trust-architecture.md) — or run `lsof -i -P | grep neurorouter` and confirm the only outbound connections are to your configured upstream.
 
-This is a structural difference from cloud LLM proxies. A [2026 study](https://arxiv.org/abs/2604.08407) found 26 LLM proxy services collecting user credentials. The [LiteLLM supply-chain breach](https://gambit.security/blog-post/a-single-operator-two-ai-platforms-nine-government-agencies-the-full-technical-report) (March 2026) compromised thousands of organizations including a $10B startup. NeuroRouter eliminates this class of risk entirely — there is no server to breach and no database to leak.
+This is a structural difference from cloud LLM proxies. A [2026 study](https://arxiv.org/abs/2604.08407) found 26 LLM proxy services collecting user credentials. The [LiteLLM supply-chain breach](https://gambit.security/blog-post/a-single-operator-two-ai-platforms-nine-government-agencies-the-full-technical-report) (March 2026) compromised thousands of organizations including a $10B startup. A local proxy removes the hosted credential database from this path; it is not a promise to catch every encoded, chunked, or transformed secret.
 
 ## Works with ContextSpectre
 
@@ -123,7 +128,7 @@ NeuroRouter Pro and [ContextSpectre](https://github.com/ppiankov/contextspectre)
 
 | Layer | Tool | What it does |
 |---|---|---|
-| **Real-time** | NeuroRouter Pro | Shapes requests before they hit the API — protects vector anchors, strips stale reads, collapses failed retries, snapshots, and progress noise. Prevents 400 errors. Redacts secrets. |
+| **Real-time** | NeuroRouter Pro | Shapes requests before they hit the API — protects vector anchors, strips stale reads, collapses failed retries, snapshots, and progress noise. Repairs safe tool-chain breaks or blocks unsafe ones locally. Redacts detected secrets. |
 | **Post-hoc** | ContextSpectre | Analyzes session files after requests complete — finds cross-turn tangents, measures noise ratios, repairs chain integrity, exports decisions. |
 
 In a 214-request session, NeuroRouter Pro shaped 42.9% of payload in real time while preserving live vector anchors. ContextSpectre found an additional 151.7K tokens of cross-turn waste that only becomes visible with full conversation history. Maximum coverage requires both.
