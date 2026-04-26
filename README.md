@@ -1,8 +1,8 @@
 # NeuroRouter Pro
 
-When AI fails, you keep going.
+Context compiler for AI coding agents.
 
-NeuroRouter Pro is a local context-control proxy that keeps agent context current, preserves the active reasoning vector, and reports whether a long session is still trustworthy to continue before requests hit the API. It is verified with Claude Code and Codex CLI, and also works with OpenAI-compatible tools that support custom base URLs.
+NeuroRouter Pro runs locally between Claude Code, Codex, OpenAI-compatible tools, and the model API. It compiles messy agent history into minimal, model-ready context while preserving the active reasoning vector and reporting whether a long session is still trustworthy to continue before requests hit the API.
 
 ## Install
 
@@ -49,18 +49,19 @@ neurorouter proxy --dry-run
 - Proactive JSONL healing — orphaned entries repaired when the structure is provably safe
 - Context rescue — work extracted before compaction or cooldown
 
-**Keep context sharp:**
+**Compile context:**
+- Context compiler — source transcript to semantic field to target model context
 - Reasoning Continuity Score (RCS) — verifies decisions, constraints, and rejected approaches survive context shaping
 - Vector Lock — carries the objective, chosen approach, constraints, rejections, current state, and blockers across turns and restarts
 - Session Integrity — downgrades false-green sessions when objective freshness, workspace identity, recovery, loop, progress, or tool-chain signals fail
 - Workspace Identity Lock — keeps the active repo, path, remote, and release target explicit after compression or restart
 - Mutation receipts — shows what changed, which content classes were shaped, and how much signal remained
 - Auto model routing — mechanical work on Haiku or GPT-4o-mini by default
-- Context shaping — removes non-cacheable repetition while preserving load-bearing constraints
+- Context shaping — removes non-cacheable repetition while preserving load-bearing constraints and current work
 - Rate limit prediction — warns before lockout, suggests cheaper models
 - Per-project cost attribution — track spend by repo/branch
 
-Vector Lock is not chat memory, RAG, or learning. It is the compact local constraint set that keeps the model on the correct path when compaction, shaping, or proxy restarts would otherwise erase load-bearing context.
+Vector Lock is not chat memory, RAG, or learning. It is the compact local constraint set that keeps the model on the correct path when compaction, shaping, or proxy restarts would otherwise erase load-bearing context. NeuroRouter compiles that constraint set into the next request without keeping the whole transcript verbatim.
 
 RCS is useful, but it is not the whole health model. Session Integrity can invalidate a green RCS when the active objective is stale, the workspace lock conflicts, recovery disabled major filters, or loop/progress signals show the agent is stuck.
 
@@ -128,7 +129,7 @@ NeuroRouter Pro and [ContextSpectre](https://github.com/ppiankov/contextspectre)
 
 | Layer | Tool | What it does |
 |---|---|---|
-| **Real-time** | NeuroRouter Pro | Shapes requests before they hit the API — protects vector anchors, strips stale reads, collapses failed retries, snapshots, and progress noise. Repairs safe tool-chain breaks or blocks unsafe ones locally. Redacts detected secrets. |
+| **Real-time** | NeuroRouter Pro | Compiles requests before they hit the API — protects vector anchors, strips stale reads, collapses failed retries, snapshots, and progress noise. Repairs safe tool-chain breaks or blocks unsafe ones locally. Redacts detected secrets. |
 | **Post-hoc** | ContextSpectre | Analyzes session files after requests complete — finds cross-turn tangents, measures noise ratios, repairs chain integrity, exports decisions. |
 
 In a 214-request session, NeuroRouter Pro shaped 42.9% of payload in real time while preserving live vector anchors. ContextSpectre found an additional 151.7K tokens of cross-turn waste that only becomes visible with full conversation history. Maximum coverage requires both.
@@ -144,7 +145,7 @@ The free community edition is at [obstalabs/neurorouter](https://github.com/obst
 
 ## Links
 
-- [Product site](https://neurorouter.dev) · [Pricing](https://neurorouter.dev/#pricing) · [Free edition](https://github.com/obstalabs/neurorouter) · [Why we built this](https://obstalabs.dev/blog/ai-breaks)
+- [Product site](https://neurorouter.dev) · [Pricing](https://neurorouter.dev/#pricing) · [Free edition](https://github.com/obstalabs/neurorouter) · [Context compiler essay](https://obstalabs.dev/blog/context-compiler) · [Why we built this](https://obstalabs.dev/blog/ai-breaks)
 
 ## What is this repo?
 
