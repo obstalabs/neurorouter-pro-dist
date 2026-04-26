@@ -76,7 +76,7 @@ RCS is useful, but it is not the whole health model. Session Integrity can inval
 - `neurorouter status` — live session dashboard
 - `neurorouter export` — session summary as markdown
 - `neurorouter suggest` — workflow pattern suggestions
-- `neurorouter integrity` — summarize healthy, degraded, and critical session integrity from dev captures
+- `neurorouter integrity` — summarize healthy, degraded, and critical session integrity from support-safe session evidence
 - `neurorouter rescue` — extract work before session loss
 
 ## Troubleshooting
