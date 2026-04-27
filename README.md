@@ -30,11 +30,26 @@ neurorouter proxy --protocol anthropic --target https://api.anthropic.com --api-
 ANTHROPIC_BASE_URL=http://localhost:4000 claude
 
 # Codex / OpenAI mode
-neurorouter proxy --target https://api.openai.com --api-key env:OPENAI_API_KEY
-codex -c 'openai_base_url="http://127.0.0.1:4000"'
+neurorouter proxy --listen 127.0.0.1:9120 --client-profile codex --api-key env:OPENAI_API_KEY
+codex -p nr
 
-# Codex no longer recommends OPENAI_BASE_URL.
-# Use openai_base_url in a Codex profile or a -c override like the example above.
+# Put this profile in your Codex config:
+# [model_providers.neurorouter]
+# name = "NeuroRouter"
+# base_url = "http://127.0.0.1:9120"
+# openai_base_url = "http://127.0.0.1:9120"
+# wire_api = "responses"
+#
+# [profiles.nr]
+# model_provider = "neurorouter"
+# model = "gpt-5.4"
+#
+# Resume and model override:
+# codex -p nr resume SESSION_ID
+# codex -p nr -m gpt-5.5 resume SESSION_ID
+#
+# OPENAI_BASE_URL alone is not reliable for current Codex routing.
+# Use --auth-source client_passthrough only when the client forwards Authorization.
 
 # See what would be filtered without sending
 neurorouter proxy --dry-run
