@@ -80,6 +80,19 @@ RCS is useful, but it is not the whole health model. Session Integrity can inval
 - `neurorouter integrity` — summarize healthy, degraded, and critical session integrity from support-safe session evidence
 - `neurorouter rescue` — extract work before session loss
 
+## When Pro Helps
+
+NeuroRouter Pro is most useful when AI coding sessions get long, expensive, or
+fragile. It keeps useful context alive, removes stale transcript drag, protects
+detected secrets, repairs safe tool-chain continuity breaks before provider 400
+errors, and warns when a session is no longer making trustworthy progress.
+
+## What It Is Not
+
+NeuroRouter Pro is not a replacement for the model, a hosted gateway, memory,
+RAG, or an autonomous agent brain. It is a local compiler and safety layer for
+the context you already send.
+
 ## Troubleshooting
 
 | Issue | Fix |
