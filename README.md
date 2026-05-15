@@ -26,6 +26,23 @@ nr launch codex
 NeuroRouter proxy, chooses a loopback port, prepares the client environment, and
 writes customer-safe launcher logs automatically.
 
+## Privacy Modes
+
+Launcher logs are customer-safe by default. Detected secrets default to `warn`,
+which alerts you before the request continues but does not rewrite the request
+payload.
+
+For strict privacy mode, turn on outbound redaction before launching:
+
+```bash
+nr config set protect-policy redact
+nr config set output-secret-policy redact
+nr launch claude
+```
+
+Manual proxy and API-key workflows keep their configured policy. Use strict mode
+when you want detected secrets replaced before provider requests.
+
 The release installs both `nr` and `neurorouter`; examples use `nr`.
 
 ## Install
