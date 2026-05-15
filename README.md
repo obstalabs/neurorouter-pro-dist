@@ -35,8 +35,8 @@ payload.
 For strict privacy mode, turn on outbound redaction before launching:
 
 ```bash
-nr config set protect-policy redact
-nr config set output-secret-policy redact
+nr config set protect_policy redact
+nr config set output_secret_policy redact
 nr launch claude
 ```
 
