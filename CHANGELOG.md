@@ -2,5 +2,5 @@
 
 ## Unreleased
 
-- OAuth via `nr launch <client>`; replaces manual proxy setup for OAuth flows.
-- Release notes: Launcher is the canonical OAuth entry.
+- Claude account-auth via `nr launch claude`; Codex API-key setup via `nr launch codex`.
+- Release notes: Launcher is the canonical entry for supported client setup.

@@ -16,15 +16,18 @@ nr activate <your-license-key>
 nr launch claude
 ```
 
-Use Codex the same way:
+Use Codex with an OpenAI API key:
 
 ```bash
+export OPENAI_API_KEY=...
 nr launch codex
 ```
 
-`nr launch <client>` is the recommended OAuth path. It starts the local
-NeuroRouter proxy, chooses a loopback port, prepares the client environment, and
-writes customer-safe launcher logs automatically.
+`nr launch claude` is the recommended Claude account-auth path. `nr launch
+codex` currently uses API-key routing because Codex account OAuth cannot yet be
+proxied through the OpenAI Responses API scope that Codex requires. Both launch
+commands start the local NeuroRouter proxy, choose a loopback port, prepare the
+client environment, and write customer-safe launcher logs automatically.
 
 ## Privacy Modes
 
@@ -63,8 +66,9 @@ Get a key at [neurorouter.dev](https://neurorouter.dev/#pricing) or try free for
 14 days.
 
 Activation validates the new key before replacing the saved key. Offline
-licenses work until their signed expiry; if a key expires, NeuroRouter falls
-back to Free and prints a clear warning.
+licenses work until their signed expiry. By default, expired licenses are
+refused with a clear warning. Operators who want expiry to degrade to Free can
+set `--license-expiry-policy=degrade`.
 
 ## What Pro Does
 
@@ -107,9 +111,10 @@ erase the constraints that matter.
 
 ## Advanced Proxy Mode
 
-Use `nr launch <client>` for OAuth-backed Claude and Codex sessions. Manual proxy
-mode is for API-key workflows, service deployments, and advanced operators who
-need direct control over ports, targets, and client configuration.
+Use `nr launch claude` for Claude account-auth sessions. Use `nr launch codex`
+with `OPENAI_API_KEY` for Codex sessions. Manual proxy mode is for API-key
+workflows, service deployments, and advanced operators who need direct control
+over ports, targets, and client configuration.
 
 Stable Claude API-key proxy:
 
@@ -175,8 +180,9 @@ the context you already send.
 |-------|-----|
 | License not recognized | `nr activate <key>` then `nr version` |
 | License near expiry | Activate the renewed key before the date shown in the startup banner |
-| License expired | NeuroRouter falls back to Free; run `nr activate <new-key>` after renewal |
-| Claude or Codex OAuth setup | Use `nr launch claude` or `nr launch codex` |
+| License expired | Renew and run `nr activate <new-key>`; default policy refuses expired Pro licenses |
+| Claude account-auth setup | Use `nr launch claude` |
+| Codex setup | Set `OPENAI_API_KEY`, then use `nr launch codex` |
 | Service deployment | Do not put `--license-key` in systemd `ExecStart`; use `EnvironmentFile=/etc/neurorouter/env` with mode `0600` and `NEUROROUTER_LICENSE=...` |
 | Port conflict | `neurorouter proxy --listen 127.0.0.1:9120` |
 | Protocol detection | `neurorouter proxy --protocol anthropic` |
@@ -257,9 +263,10 @@ The free community edition is at
 
 ## What is this repo?
 
-This repo contains only release binaries and checksums. Source code is private.
-GitHub shows `Source code` assets on release pages; those contain only this
-README.
+This repo contains the public distribution README and changelog. Release
+binaries and checksums are published as GitHub release assets. Source code is
+private. GitHub shows `Source code` archives on release pages; those archives
+contain only the public distribution files, not product source code.
 
 ## License
 
