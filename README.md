@@ -43,8 +43,11 @@ nr config set output_secret_policy redact
 nr launch claude
 ```
 
-Manual proxy and API-key workflows keep their configured policy. Use strict mode
-when you want detected secrets replaced before provider requests.
+In strict mode, redaction covers secrets in tool output — not just the prompt —
+before that output reaches the model, and it fails safe: if redaction cannot
+complete, the request is held rather than forwarded. Manual proxy and API-key
+workflows keep their configured policy. Use strict mode when you want detected
+secrets replaced before provider requests.
 
 The release installs both `nr` and `neurorouter`; examples use `nr`.
 
@@ -94,14 +97,34 @@ compact local task frame so compaction, restarts, and long tool sessions do not
 erase the constraints that matter.
 
 **Protect your data:**
+- Secrets in tool output are caught before the model sees them. When a command
+  your agent runs prints a token, key, or credential, it is replaced with a
+  reversible placeholder before that output enters the model's context — and you
+  get an operator-only notice that a secret was caught, naming the kind, never
+  the value
+- Fail-safe by design: if the redaction step ever errors or is interrupted, the
+  request is held rather than forwarded — unredacted content is never passed
+  through on a failure
+- Restore-to-destination guard: a protected secret is only ever resolved back to
+  its legitimate destination, so model-authored output cannot send a placeholder
+  somewhere it shouldn't and get the real value substituted in
 - Reversible secret redaction, with credentials restored only on the local reply
   path
 - Sensitive path protection with configurable deny and allow lists
+- Pre-launch credential sweep: `nr launch` scans your workspace for credentials
+  sitting in files and shows a secret-free summary (advisory, never blocks)
+- Proactive obfuscation you pre-declare — your own domains, internal addresses,
+  and naming patterns, obfuscated on the way out
+- Agent attribution stripping: "Generated with …" footers and co-author trailers
+  that coding agents add are removed before they reach you, so they never land in
+  your commits or pull requests (on by default)
 - Prompt injection detection for suspicious tool output
 - Optional privacy scrub for additional content sanitization
 
 **Stay informed:**
-- `nr doctor` - preflight diagnostics
+- `nr doctor` - preflight diagnostics, including a warning when secret-bearing
+  environment variables are exported into your agent's environment
+- `nr obfuscation-init` - suggest obfuscation config entries from a sample log
 - `nr summary` - daily report
 - `nr status` - live session dashboard
 - `nr export` - session summary as markdown
