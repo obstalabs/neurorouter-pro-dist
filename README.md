@@ -276,6 +276,12 @@ The free community edition is at
 [obstalabs/neurorouter](https://github.com/obstalabs/neurorouter). See the
 [full comparison](https://github.com/obstalabs/neurorouter#free-vs-pro).
 
+Pro is the available product today: it runs locally and never calls home. Team
+and Enterprise tiers — governed agent fleets, where an org's agents form a
+network and their work is auditable to an owner-controlled sink — are in design
+and **not shipping yet**. They are a roadmap direction, not a current offering;
+this README covers what ships today.
+
 ## Links
 
 - [Product site](https://neurorouter.dev)
