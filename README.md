@@ -319,4 +319,4 @@ contain only the public distribution files, not product source code.
 
 ## License
 
-Proprietary. [Obsta Labs LLC](https://obstalabs.dev).
+Proprietary. [OBSTA LABS PTE. LTD.](https://obstalabs.dev).
