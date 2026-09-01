@@ -69,6 +69,65 @@ Extract the archive and place both commands on your `PATH`. On Windows the
 command names end in `.exe`. `nr` is the short name for the same command surface
 as `neurorouter`.
 
+## Run in Kubernetes
+
+The gateway ships as a signed container image and a Helm chart, published with
+every release.
+
+Pull the image:
+
+```bash
+docker pull ghcr.io/obstalabs/neurorouter-pro-dist:<version>
+```
+
+Pin a digest instead of a tag when you want the exact bytes you reviewed:
+
+```bash
+docker pull ghcr.io/obstalabs/neurorouter-pro-dist@sha256:<digest>
+```
+
+Install the chart from the release asset:
+
+```bash
+curl -sSLO https://github.com/obstalabs/neurorouter-pro-dist/releases/download/v<version>/neurorouter-gateway-<version>.tgz
+helm install neurorouter ./neurorouter-gateway-<version>.tgz \
+  --set image.tag=<version>
+```
+
+Provider credentials are supplied as existing Kubernetes Secrets and are never
+written into chart values. The chart refuses a replica count other than one:
+token custody depends on a single process owning session state, so scaling is
+rejected at validation rather than silently accepted. If a node partition is
+uncertain, do not force-delete the pod until the old process is confirmed
+stopped.
+
+The deployment runs as a non-root user on a read-only filesystem with no added
+privileges, under restricted Pod Security and a default-deny network policy.
+Health and metrics are served on a separate port from model traffic, so probes
+and dashboards never touch the endpoint your agents use.
+
+## Verifying what you downloaded
+
+Every release publishes `checksums.txt` with a signature and the signing
+certificate beside it, and a software bill of materials for each image platform.
+
+Verify the checksums file, then verify any archive against it:
+
+```bash
+cosign verify-blob \
+  --certificate checksums.txt.pem \
+  --signature checksums.txt.sig \
+  --certificate-identity-regexp 'https://github\.com/obstalabs/.+' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  checksums.txt
+shasum -a 256 -c checksums.txt --ignore-missing
+```
+
+The container image is signed the same way and can be verified by digest with
+`cosign verify`. The per-platform SBOMs are published as release assets named
+`neurorouter-gateway-<version>-linux-amd64.spdx.json` and
+`neurorouter-gateway-<version>-linux-arm64.spdx.json`.
+
 ## Activate
 
 ```bash
