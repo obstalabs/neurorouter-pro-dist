@@ -1,0 +1,44 @@
+NeuroRouter Pro — Commercial License
+
+Copyright (c) 2026 OBSTA LABS PTE. LTD. All rights reserved.
+
+The software, container images, Helm charts, and other artifacts
+distributed in this repository ("Artifacts") are proprietary and
+licensed, not sold.
+
+1. GRANT. Subject to a valid commercial agreement, subscription, or
+   written evaluation permission from Obsta Labs ("Agreement"), you are
+   granted a non-exclusive, non-transferable, revocable license to
+   download and use the Artifacts for your internal business purposes,
+   on the number of instances and for the term set out in the Agreement.
+
+2. RESTRICTIONS. Except as expressly permitted by the Agreement or by
+   law, you may not: (a) copy, modify, or create derivative works of
+   the Artifacts; (b) distribute, sublicense, rent, lease, or provide
+   the Artifacts to any third party, including as a hosted or managed
+   service; (c) reverse engineer, decompile, or disassemble the
+   Artifacts; (d) remove or alter any proprietary notices.
+
+3. NO AGPL / NO COPYLEFT. The Artifacts in this repository are NOT
+   licensed under the GNU AGPL or any other open-source license. The
+   separately published NeuroRouter community edition is licensed under
+   AGPL v3 in its own repository; that license does not extend to these
+   Artifacts.
+
+4. THIRD-PARTY COMPONENTS. The Artifacts may include third-party
+   components under their own license terms, which are listed in the
+   accompanying notices file(s) where applicable and govern those
+   components only.
+
+5. NO WARRANTY. THE ARTIFACTS ARE PROVIDED "AS IS" WITHOUT WARRANTY OF
+   ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, OBSTA LABS
+   DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, AND SHALL NOT BE
+   LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL
+   DAMAGES ARISING FROM USE OF THE ARTIFACTS.
+
+6. TERMINATION. This license terminates automatically on breach or on
+   expiry/termination of the Agreement. On termination you must stop
+   using and delete the Artifacts.
+
+7. CONTACT. Commercial terms, subscriptions, and evaluation requests:
+   contact@obstalabs.dev
