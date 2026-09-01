@@ -59,6 +59,16 @@ brew install obstalabs/tap/neurorouter-pro
 
 Or download from [releases](https://github.com/obstalabs/neurorouter-pro-dist/releases/latest).
 
+## What is in this package
+
+A downloaded release archive contains prebuilt `neurorouter` and `nr` commands
+for one operating system and architecture, together with the customer changelog
+and the license. It does not contain the product source code.
+
+Extract the archive and place both commands on your `PATH`. On Windows the
+command names end in `.exe`. `nr` is the short name for the same command surface
+as `neurorouter`.
+
 ## Activate
 
 ```bash
@@ -237,6 +247,16 @@ NEUROROUTER_LICENSE=ol_...
 ANTHROPIC_API_KEY=...
 OPENAI_API_KEY=...
 ```
+
+## Trust boundary
+
+- The proxy listens on loopback by default.
+- Provider credentials remain local except when sent to the configured provider.
+- Context shaping and routing are deterministic and locally inspectable.
+- Ordinary diagnostics report outcomes without exposing raw prompts or secrets.
+- NeuroRouter is not hosted by default and does not send product telemetry.
+
+Run `nr --help` for commands and `nr doctor` for actionable setup diagnostics.
 
 ## Security
 
