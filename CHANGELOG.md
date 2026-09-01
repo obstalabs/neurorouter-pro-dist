@@ -10,6 +10,15 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.38.8] - 2026-09-01
+
+Version 0.38.7 was prepared but never published. If you are upgrading from
+0.37.2, this release contains everything described in the sections below.
+
+### Changed
+- **The distribution repository now carries its own license.** Binaries, container images, and Helm charts published here are covered by the NeuroRouter Pro commercial license, included as `LICENSE` alongside the downloads. The separately published community edition remains under its own open-source license in its own repository; that license does not extend to these artifacts.
+- **The repository documentation now describes what a downloaded package contains** and states the trust boundary the proxy operates under, so both are available before you install rather than only inside the archive.
+
 ## [0.38.7] - 2026-09-01
 
 Version 0.38.6 was prepared but never published. If you are upgrading from
