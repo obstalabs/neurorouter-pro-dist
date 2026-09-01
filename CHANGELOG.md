@@ -10,6 +10,14 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.38.9] - 2026-09-01
+
+Version 0.38.8 delivered the signed binaries, Helm chart, and checksums. This
+release adds the container image that accompanies them.
+
+### Fixed
+- **The gateway container image is now published alongside the release.** The first publication of a new image location could not complete, so the image was missing from an otherwise complete release. Publishing now succeeds on a first release, and a genuine registry or authentication error still stops the release rather than being mistaken for an empty registry.
+
 ## [0.38.8] - 2026-09-01
 
 Version 0.38.7 was prepared but never published. If you are upgrading from
