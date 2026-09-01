@@ -10,6 +10,16 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.38.10] - 2026-09-02
+
+### Added
+- **The Helm chart can now be installed by reference.** The chart is published alongside the container image, so it can be installed and upgraded directly instead of downloading a file from a release page first. The published chart is checked against the release asset before the release completes.
+- **The container image and the Helm chart are documented.** The repository now describes pulling the image by tag or by digest, installing the chart, supplying credentials as Kubernetes Secrets, the single-instance requirement, and how to verify the files you downloaded.
+
+### Fixed
+- **The container image is listed with the distribution it belongs to**, so it can be found from the same place as the binaries and the chart.
+- **Release listings no longer show internal build identifiers.**
+
 ## [0.38.9] - 2026-09-01
 
 Version 0.38.8 delivered the signed binaries, Helm chart, and checksums. This
