@@ -10,6 +10,11 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.38.12] - 2026-09-02
+
+### Fixed
+- **The `latest` container image tag tracks the current release again.** Version-pinned pulls were never affected.
+
 ## [0.38.11] - 2026-09-02
 
 ### Fixed
