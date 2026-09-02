@@ -10,6 +10,11 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.38.11] - 2026-09-02
+
+### Fixed
+- **The Helm chart can be installed directly from the registry.** Installing and upgrading no longer requires downloading the chart file first.
+
 ## [0.38.10] - 2026-09-02
 
 ### Added
