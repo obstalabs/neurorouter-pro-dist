@@ -10,6 +10,15 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.38.13] - 2026-09-03
+
+### Added
+- Documentation for running NeuroRouter Pro without internet access. Covers mirroring the container image into your own registry, installing the Helm chart against that mirror with your own pull secret, and the licence expiry decision to make before you deploy rather than during an incident.
+- Guidance on verifying what you downloaded before it crosses an airgap, and on checking integrity afterwards with no network at all.
+
+### Changed
+- Listing the tags of the container repository no longer shows internal release-process entries for new releases. Published version tags, `latest`, and signature tags are unaffected, and tags published before this release are unchanged.
+
 ## [0.38.12] - 2026-09-02
 
 ### Fixed

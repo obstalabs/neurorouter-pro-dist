@@ -106,6 +106,84 @@ privileges, under restricted Pod Security and a default-deny network policy.
 Health and metrics are served on a separate port from model traffic, so probes
 and dashboards never touch the endpoint your agents use.
 
+## Running without internet access
+
+The gateway needs no outbound connection to run. Licences are validated locally
+against a signed key, so activation and renewal work with no route to us: there
+is no entitlement service to call, no telemetry, and no update check. A key is
+valid until the expiry date it carries.
+
+Decide the expiry behaviour before you deploy, not during an incident. By
+default an expired licence is refused. Sites that cannot renew quickly may
+prefer `--license-expiry-policy=degrade`, which falls back to Free instead of
+refusing.
+
+### Mirroring the image into your own registry
+
+On a machine with internet access, pull the image and save it to a file:
+
+```bash
+docker pull ghcr.io/obstalabs/neurorouter-pro-dist@sha256:<digest>
+docker save ghcr.io/obstalabs/neurorouter-pro-dist@sha256:<digest> \
+  -o neurorouter-gateway-<version>.tar
+```
+
+Carry that file plus the chart `.tgz`, `checksums.txt`, `checksums.txt.bundle`,
+`checksums.txt.sig`, `checksums.txt.pem` and the SBOMs across the gap. Then load
+and push into your registry:
+
+```bash
+docker load -i neurorouter-gateway-<version>.tar
+docker tag ghcr.io/obstalabs/neurorouter-pro-dist@sha256:<digest> \
+  registry.internal.example/neurorouter-pro:<version>
+docker push registry.internal.example/neurorouter-pro:<version>
+```
+
+Install the chart against your mirror, supplying the pull secret your registry
+requires:
+
+```bash
+helm install neurorouter ./neurorouter-gateway-<version>.tgz \
+  --set-string image.repository=registry.internal.example/neurorouter-pro \
+  --set-string image.tag=<version> \
+  --set-string 'image.pullSecrets[0]=<your-pull-secret>'
+```
+
+Nothing in that install references a public registry. The pull secret is
+referenced by name only and its value is never copied into chart values.
+
+### Verifying what you carried across the gap
+
+Verify signatures on a machine that still has internet access, **before** you
+transfer. Our release signatures use short-lived certificates whose proof of
+validity lives in the public transparency log, so a host with no route to
+`tuf-repo-cdn.sigstore.dev` cannot complete a signature check today. Verify
+first, then carry the verified files:
+
+```bash
+cosign verify-blob \
+  --bundle checksums.txt.bundle \
+  --certificate-identity-regexp 'https://github\.com/obstalabs/.+' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --offline \
+  checksums.txt
+```
+
+Once `checksums.txt` is verified, everything else is checkable with no network
+at all, on the airgapped side, because the checksums cover every file:
+
+```bash
+shasum -a 256 -c checksums.txt --ignore-missing
+```
+
+Run that after the transfer. It is what proves nothing was altered in transit,
+and it needs no signature infrastructure.
+
+If your policy requires signature verification to happen **on** the airgapped
+host rather than before transfer, tell us — that needs a signing change on our
+side, not a flag on yours, and we would rather fix it than have you skip
+verification.
+
 ## Verifying what you downloaded
 
 Every release publishes `checksums.txt` with a signature and the signing
