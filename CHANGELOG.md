@@ -10,6 +10,21 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.39.0] - 2026-09-12
+
+### Added
+- Managed Codex launch and resume. `nr launch codex` and `nr launch codex resume` start a supervised Codex session through NeuroRouter, and resuming an existing session keeps its earlier conversation intact.
+- Resuming can select a session by exact identifier, by name, from the picker, or with `--last`. Requests that look like a credential, or that do not match the provider a session was recorded against, are refused before anything starts rather than part-way through.
+- Release packages for the pinned Codex versions used in testing are now retained and checked for integrity as part of every build.
+
+### Changed
+- Concurrent Codex sessions launched through NeuroRouter no longer share request-handling state with one another. Existing caching and batching behaviour is unchanged.
+
+### Known limitations
+- The interactive compatibility matrix for supervised Codex sessions is **not** proven by this release. Launch and resume have been exercised end to end against a live backend, but the pinned-version compatibility lane remains unfinished and its outcome is unknown. Treat supervised Codex launch as working-but-unverified across Codex versions other than the one you test yourself.
+- Supervised Codex launches enable configured command hooks without the usual interactive trust review, and Codex reports this at startup. This is required for NeuroRouter's own authority checks to run. If you rely on that review step for your own hooks, take it into account before using supervised launch.
+
+
 ## [0.38.13] - 2026-09-03
 
 ### Added
