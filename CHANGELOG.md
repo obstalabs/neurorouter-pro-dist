@@ -10,6 +10,13 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.39.1] - 2026-09-22
+
+### Fixed
+- Resuming a long Claude Code session through `nr launch claude --resume` no longer fails to start. Sessions whose preserved brief had grown large previously stopped with an "argument list too long" error that said nothing about the brief or its size.
+- A very large preserved brief is now shortened automatically instead of blocking the launch. The beginning and the end of the brief are kept, the end exactly as written, and a visible marker in between reports how much was removed. Your most recent decisions and findings are the part that survives.
+- When a launch still cannot proceed, the error now names the brief, its size, and the limit it exceeded, so it is clear what to shorten.
+
 ## [0.39.0] - 2026-09-12
 
 ### Added
