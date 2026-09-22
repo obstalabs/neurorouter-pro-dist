@@ -10,6 +10,13 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-09-22
+
+### Added
+- Other tools can now discover a running NeuroRouter proxy. `nr proxies --json --output-mode operator` lists the local proxy listeners as structured records, so a script or another program can find a live endpoint instead of guessing at one or reading log output.
+- This is a supported, documented surface. Discovery tells you what is already running; it does not start a proxy for you. If nothing suitable is running, start one yourself with `nr proxy` and the options your setup needs. That split is deliberate, so the discovery surface stays stable rather than being tied to how a session is set up internally.
+- Errors from this surface now carry a short, stable code alongside the message. A program can check the code and react, instead of matching on wording that may change.
+
 ## [0.39.1] - 2026-09-22
 
 ### Fixed
