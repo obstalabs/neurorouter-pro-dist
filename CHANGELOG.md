@@ -10,6 +10,15 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-09-23
+
+### Added
+- Claude Code sessions started by NeuroRouter no longer send usage metrics, error reports, survey ratings or transcript feedback to the model vendor. Previously a session could send those directly, outside NeuroRouter, including your full conversation and the source files it contained if you answered the feedback prompt.
+- You can allow it for a session with `--allow-nonessential-traffic`, or set `claude_allow_nonessential_traffic` in your config. It is off unless you turn it on.
+- The launch banner and the session record both state which choice applied, so you can answer afterwards what a given session was permitted to send.
+- If you already set these switches yourself, your setting is kept. NeuroRouter never relaxes a stricter choice you made, and the banner lists what it found.
+- One cost, stated plainly: Remote Control does not work in a session with this traffic turned off, because it depends on the same channel.
+
 ## [0.40.0] - 2026-09-22
 
 ### Added
