@@ -10,6 +10,17 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-09-26
+
+### Added
+- When a session will not resume, NeuroRouter now tells you whether a backup of that transcript is sitting next to it on disk. Previously you got only "No conversation found with session ID", which is true and useless — it named the session, not the situation. You now get the backup's full path, its size, a quick check of whether it looks readable, and the exact command to put it back.
+- `nr session orphans` checks every project at once and lists every session whose transcript is missing while a backup remains. It changes nothing, and it exits with an error code when it finds any, so you can run it as a health check.
+- `nr session restore <id>` puts a backup back. It copies rather than moves, so the backup survives until you have confirmed the session resumes, and it refuses outright rather than overwriting a transcript that is already there.
+- Nothing is restored unless you ask for it. Detection never writes, moves, renames or deletes a file, and that is enforced by a test rather than promised in a note. A tool that quietly relocates your transcripts is how this problem is created, not how it is solved.
+
+### Fixed
+- Sessions could become unresumable while their full transcript remained on disk under a slightly different name, with nothing pointing you at it. One session on a developer machine had been unreachable for six weeks with its data intact the whole time. NeuroRouter does not cause this — the rename happens above it — but it was silent about what it could plainly see, and that silence was the defect.
+
 ## [0.41.0] - 2026-09-23
 
 ### Added
