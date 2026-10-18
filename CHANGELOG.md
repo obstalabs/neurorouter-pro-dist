@@ -10,6 +10,21 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.43.0] - 2026-10-18
+
+### Changed
+- Improved the reliability of the automated test suite on developer machines; no change in behaviour.
+- Added a regression check for active-work tracking across tool turns; no change in behaviour.
+
+### Security
+- Kubernetes operators can opt in to an agent-namespace policy example allowing DNS and the gateway model port, with client setup and verification commands; enforcement requires a policy-capable CNI.
+- When a model writes one of your protected secrets into a command or address that would send it somewhere else (a DNS lookup, a shell or interpreter command, a Git remote, a mail or cloud tool, or another URL), NeuroRouter now leaves the placeholder in place instead of restoring the real value. Output you read yourself is still restored as before.
+
+### Fixed
+- If NeuroRouter produces a malformed request while processing a Claude session, it can now continue from the last safe, still-protected version instead of returning a 500, while recording the failure for the operator.
+- If a sub-agent exits abnormally and every later change in your launched session is refused, use `nr authority-hook --reset --state-dir <path> --session <id>` to clear the stuck session. Recovery happens only when you request it.
+- Claude sessions that read files with extended thinking enabled no longer get stuck repeating a 500 error when NeuroRouter protects the visible text. Protected reasoning is kept exactly as received, so the session can continue.
+
 ## [0.42.0] - 2026-09-26
 
 ### Added
