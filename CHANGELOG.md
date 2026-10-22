@@ -10,6 +10,29 @@ names, thresholds, ranking logic, or precedence rules.
 
 ## [Unreleased]
 
+## [0.44.0] - 2026-10-22
+
+### Changed
+
+- Improved the reliability of release packaging; no change in behaviour.
+- Improved the reliability of the automated test suite; no change in behaviour.
+- When NeuroRouter pauses a commit or a completion claim because files are still uncommitted, the message now says who triggered it, which files, and exactly what you can reply to continue.
+- When NeuroRouter refuses a request it cannot safely process, it now says so plainly, tells you retrying will not help and what to do next, and no longer triggers your client's automatic retries.
+
+### Fixed
+
+- NeuroRouter's pacing of Anthropic requests is more robust against unusual or incomplete responses.
+- NeuroRouter's protection against runaway retries is more accurate: requests it already paused no longer count against you, and a real retry loop is still caught.
+- Several Codex sessions started at once in the same project are no longer slowed down as if they were one runaway conversation.
+- Files your agent writes inside a new, not-yet-committed sub-repository are now checked before the task is allowed to finish.
+- A file your agent renames is now checked before the task is allowed to finish, like any other file it writes.
+- NeuroRouter no longer lets a task finish with unsaved new files when the project lives under a symlinked folder such as /tmp on macOS.
+- Parallel requests that share a long cached conversation, such as Claude Code auto-mode checks, no longer wait in NeuroRouter for tokens Anthropic does not count against your limit.
+- Running several Claude Code subagents at once no longer gets them stopped as a rapid-fire burst. When NeuroRouter does slow down a runaway conversation, your client now waits and continues on its own. The limits can be set with NEUROROUTER_BURST_THRESHOLD and NEUROROUTER_BURST_WINDOW.
+- Long Claude Code sessions whose history is too large for NeuroRouter to repair can now be resumed with `nr launch claude -r` when the end of the session is intact; NeuroRouter checks the recent history instead of refusing outright, and no longer suggests switching to API-key auth or restoring a file that never existed.
+- Untracked build output that your session never touched (for example a Gradle report) no longer blocks the conversation with a partial-commit warning after you commit; files your session created with any editing tool still block until you commit or revert them. This also applies when the session works in a subdirectory of the repository.
+- If NeuroRouter corrupts a request so badly it is no longer valid, it now falls back to the last safe version instead of returning a 500, and it always keeps the model you were routed to.
+
 ## [0.43.0] - 2026-10-18
 
 ### Changed
