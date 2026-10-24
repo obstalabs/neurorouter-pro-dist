@@ -449,7 +449,8 @@ this README covers what ships today.
 
 ## What is this repo?
 
-This repo contains the public distribution README and changelog. Release
+This repo contains the public distribution README and license; each release's
+changes are in its release notes and in the CHANGELOG.md inside every download. Release
 binaries and checksums are published as GitHub release assets. Source code is
 private. GitHub shows `Source code` archives on release pages; those archives
 contain only the public distribution files, not product source code.
