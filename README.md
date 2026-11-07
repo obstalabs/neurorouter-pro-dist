@@ -4,9 +4,10 @@ Local context shaping and safety layer for Claude Code, Codex, and
 OpenAI-compatible coding tools.
 
 NeuroRouter Pro runs on your machine between your coding agent and the model
-provider. It keeps long sessions usable, trims stale transcript drag, protects
+provider. It keeps long sessions usable, protects
 detected secrets, and warns when a session is no longer healthy enough to keep
-going.
+going. For Claude Code sessions, optional context shaping that trims stale
+transcript drag is off by default; turn it on with `nr config set optional_shaping apply`.
 
 ## Quick Start
 
@@ -31,9 +32,10 @@ client environment, and write customer-safe launcher logs automatically.
 
 ## Privacy Modes
 
-Launcher logs are customer-safe by default. Detected secrets default to `warn`,
-which alerts you before the request continues but does not rewrite the request
-payload.
+Launcher logs are customer-safe by default. The secret posture defaults to
+`warn`: proven built-in secret formats and configured exact values are replaced
+with placeholders before forwarding even in this mode, while heuristic
+("possible secret") findings are reported and forwarded unchanged.
 
 For strict privacy mode, turn on outbound redaction before launching:
 
@@ -230,7 +232,7 @@ set `--license-expiry-policy=degrade`.
 - Context rescue before compaction or cooldown
 
 **Shape context:**
-- Context shaping for long, noisy coding-agent sessions
+- Optional context shaping for long, noisy Claude Code sessions is off by default; turn it on with `nr config set optional_shaping apply`.
 - Session health checks for task continuity, workspace identity, recovery state,
   loops, progress, and tool-chain reliability
 - Workspace identity guard for active repo, path, remote, and release target
@@ -334,15 +336,20 @@ neurorouter proxy --dry-run
 ## When Pro Helps
 
 NeuroRouter Pro is most useful when AI coding sessions get long, expensive, or
-fragile. It keeps useful context alive, removes stale transcript drag, protects
+fragile. It keeps useful context alive, protects
 detected secrets, repairs safe tool-chain continuity breaks before provider
 errors, and warns when a session is no longer making trustworthy progress.
+For Claude Code sessions, optional context shaping that also trims stale transcript drag is off by default; turn it on with `nr config set optional_shaping apply`.
 
 ## What It Is Not
 
 NeuroRouter Pro is not a replacement for the model, a hosted gateway, memory,
 RAG, or an autonomous agent brain. It is a local compiler and safety layer for
 the context you already send.
+
+- Not a tool sandbox: it does not run tool calls or confine what they do once they run; your client and your OS do that. NeuroRouter can refuse specific actions before they run, such as a background agent's commit or push.
+- Not the record: its receipts are local evidence for a record kept elsewhere.
+- Not an agent inventory: it sees the sessions connected to its proxy, including clients connected manually.
 
 ## Troubleshooting
 
@@ -411,6 +418,15 @@ collecting user credentials. The
 local proxy removes the hosted credential database from this path; it is not a
 promise to catch every encoded, chunked, or transformed secret.
 
+What the boundary does today:
+
+- Secrets become placeholders before a request leaves the machine, so the model never sees the value. Placeholders are restored only on the local side, and never into a command that would send the value back out, such as a cloud upload.
+- In Claude Code sessions, detected prompt-injection patterns in untrusted tool results are flagged in-band with the source tool named. Detection warns; it does not block.
+- Always-on guards detect duplicate, burst and runaway request loops and tell you when they happen.
+- For the clients it launches, NeuroRouter is the one host model traffic leaves
+  through, so an OS egress allowlist can be written around it. Agents that talk
+  to their own vendor backend are outside this path.
+
 ## Works with ContextSpectre
 
 NeuroRouter Pro and
@@ -419,7 +435,7 @@ stages of the same anti-waste pipeline.
 
 | Layer | Tool | What it does |
 |---|---|---|
-| **Real-time** | NeuroRouter Pro | Shapes requests before they hit the API, preserves task-critical context, trims stale reads, collapses failed retries, repairs safe tool-chain breaks, and redacts detected secrets. |
+| **Real-time** | NeuroRouter Pro | For Claude Code sessions, repairs safe tool-chain breaks, redacts detected secrets, and preserves task-critical context by default. Optional context shaping for Claude Code sessions trims stale reads and collapses failed retries; it is off by default, and you turn it on with `nr config set optional_shaping apply`. |
 | **Post-hoc** | ContextSpectre | Analyzes session files after requests complete, finds cross-turn tangents, measures noise ratios, repairs chain structure, and exports decisions. |
 
 ```bash
