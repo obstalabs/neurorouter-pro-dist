@@ -1,7 +1,7 @@
 # NeuroRouter Pro
 
-Local context shaping and safety layer for Claude Code, Codex, and
-OpenAI-compatible coding tools.
+Local context shaping and safety layer for Claude Code, Codex CLI
+and other OpenAI-compatible or Anthropic-compatible coding tools.
 
 NeuroRouter Pro runs on your machine between your coding agent and the model
 provider. It keeps long sessions usable, protects
@@ -60,6 +60,25 @@ brew install obstalabs/tap/neurorouter-pro
 ```
 
 Or download from [releases](https://github.com/obstalabs/neurorouter-pro-dist/releases/latest).
+
+### Windows
+
+```powershell
+scoop bucket add obstalabs https://github.com/obstalabs/scoop-bucket
+scoop install neurorouter-pro
+nr activate <your-license-key>
+nr launch claude
+```
+
+Without Scoop, download the `windows_amd64` or `windows_arm64` zip from the
+releases page, extract it, and put the folder on your `PATH`.
+
+Claude Code's installer puts `claude.exe` in `%USERPROFILE%\.local\bin`. A
+terminal that was open before that install does not have the folder on its
+`PATH` yet. `nr launch claude` finds the client there and tells you which
+file it used. To choose another one, run
+`nr launch claude --client-path <file>`. To run `claude` on its own, open a
+new terminal or add that folder to your `PATH`.
 
 ## What is in this package
 
@@ -225,7 +244,7 @@ set `--license-expiry-policy=degrade`.
 ## What Pro Does
 
 **Keep your session alive:**
-- Session multiplexing for Claude, Codex, and OpenAI-compatible tools
+- Session multiplexing for Claude Code, Codex CLI and other OpenAI-compatible or Anthropic-compatible tools in one local process
 - Tool-chain repair when local continuity breaks can be fixed safely
 - Binary content sanitization for terminal output, SSH results, and file reads
 - Proactive JSONL healing when the structure is provably safe
@@ -237,13 +256,15 @@ set `--license-expiry-policy=degrade`.
   loops, progress, and tool-chain reliability
 - Workspace identity guard for active repo, path, remote, and release target
 - Progress receipts that show what changed and how much useful context remained
-- Auto model routing for mechanical work on cheaper models by default
+- Optional routing of mechanical work to cheaper models; off by default
 - Rate-limit prediction before lockout
 - Per-project cost attribution by repo and branch
 
 The goal is not to memorize your chats or replace the model. NeuroRouter keeps a
-compact local task frame so compaction, restarts, and long tool sessions do not
-erase the constraints that matter.
+compact local task frame of the objective and the constraints that matter. An
+optional session reminder can restate them in Claude Code sessions; it is off by
+default, it does not change your provider's cached prompt, and no
+benefit is claimed until it is measured.
 
 **Protect your data:**
 - Secrets in tool output are caught before the model sees them. When a command
